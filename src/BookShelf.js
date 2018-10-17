@@ -1,10 +1,11 @@
 //@flow
 import React, { Component } from 'react';
-import ListBooks from './ListBooks';
+import BookDetails from './BookDetails';
+import type { Book } from './Types';
 
 type Props = {
   title: string,
-  books: Array<{}>
+  books: Array<Book>
 };
 
 class BookShelf extends Component<Props> {
@@ -14,7 +15,11 @@ class BookShelf extends Component<Props> {
 				<div className="bookshelf">
 					<h2 className="bookshelf-title">{this.props.title}</h2>
 					<div className="bookshelf-books">
-						<ListBooks books={this.props.books} />
+						<ol className="books-grid">
+							{this.props.books.map(book => (
+								<BookDetails book={book} key={book.id} />
+							))}
+						</ol>
 					</div>
 				</div>
 			</div>

@@ -3,29 +3,41 @@ import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI'
 import './App.css';
 import BookShelf from './BookShelf';
+import type { Book } from './Types';
 
-class BooksApp extends Component<{}> {
+type State = {
+	shelfs: Map<string, Array<Book>>
+};
+
+class BooksApp extends Component<{}, State> {
 
 	state = {
-		books: []
+		shelfs: new Map()
 	}
 
 	componentDidMount() {
 		BooksAPI.getAll()
 			.then((books) => {
-				this.setState((prevState) => ({
-					books: [books[0], books[1], books[3]]
-				}))
-				console.log(books[0]);
-				console.log(books[1]);
-				console.log(books[2]);
+
+				this.setState(() => {
+					const newShelfs = new Map();
+					newShelfs.set("Currently Reading", books.filter(book => book.shelf === "currentlyReading"));
+					newShelfs.set("Want To Read", books.filter(book => book.shelf === "wantToRead"));
+					newShelfs.set("Read", books.filter(book => book.shelf === "read"));
+
+					return { shelfs: newShelfs}
+				})
+				//console.log(this.state.booksByCategory);
 			})
 	}
 
 	render() {
+			const { shelfs } = this.state;
     	return (
 				<div className="app">
-					<BookShelf title='Currently Reading' books={this.state.books} />
+					{[...shelfs].map(( [key, value] ) => (
+						<BookShelf key={key} title={key} books={value} />
+					))}
 				</div>
     	)
 	}
