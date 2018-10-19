@@ -3,13 +3,14 @@ import React, { Component } from 'react';
 import type { Book } from './Types';
 
 type Props = {
+	shelfId: string,
 	book: Book
 };
 
 class BookDetails extends Component<Props> {
 	render() {
 		
-		const { book } = this.props;
+		const { shelfId, book } = this.props;
 		
 		return (
 			<li>

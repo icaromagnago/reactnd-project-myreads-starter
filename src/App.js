@@ -1,33 +1,54 @@
 //@flow
 import React, { Component } from 'react';
-import * as BooksAPI from './BooksAPI'
-import './App.css';
+import { Link, Route } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
+import type { Book, Shelf } from './Types';
 import BookShelf from './BookShelf';
-import type { Book } from './Types';
+import Search from './Search';
+import Header from './Header';
+import './App.css';
+
 
 type State = {
-	shelfs: Map<string, Array<Book>>
+	shelfs: { [string]: Shelf }
 };
 
 class BooksApp extends Component<{}, State> {
 
 	state = {
-		shelfs: new Map()
+		shelfs: {
+			"currentlyReading": {
+				id: "currentlyReading",
+				title: "Currently Reading",
+				books: []
+			},
+			"wantToRead": {
+				id: "wantToRead",
+				title: "Want To Read",
+				books: []
+			},
+			"read": {
+				id: "read",
+				title: "Read",
+				books: []
+			}
+		}
 	}
 
 	componentDidMount() {
 		BooksAPI.getAll()
 			.then((books) => {
 
-				this.setState(() => {
-					const newShelfs = new Map();
-					newShelfs.set("Currently Reading", books.filter(book => book.shelf === "currentlyReading"));
-					newShelfs.set("Want To Read", books.filter(book => book.shelf === "wantToRead"));
-					newShelfs.set("Read", books.filter(book => book.shelf === "read"));
+				this.setState(( prevState ) => {
+					const { shelfs } = prevState;
+					
+					shelfs.currentlyReading.books = books.filter(book => book.shelf === shelfs.currentlyReading.id);
+					shelfs.wantToRead.books = books.filter(book => book.shelf === shelfs.wantToRead.id);
+					shelfs.read.books = books.filter(book => book.shelf === shelfs.read.id);
 
-					return { shelfs: newShelfs}
+					return { shelfs }
 				})
-				//console.log(this.state.booksByCategory);
+				console.log(this.state.shelfs);
 			})
 	}
 
@@ -35,9 +56,22 @@ class BooksApp extends Component<{}, State> {
 			const { shelfs } = this.state;
     	return (
 				<div className="app">
-					{[...shelfs].map(( [key, value] ) => (
-						<BookShelf key={key} title={key} books={value} />
-					))}
+					<Route exact path="/" render={() => (
+						<div className="list-books">
+           		<Header />
+	          	<div className="list-books-content">
+								{Object.keys(shelfs).map(key => (
+									<BookShelf key={shelfs[key].id} shelfId={shelfs[key].id} title={shelfs[key].title} books={shelfs[key].books} />
+								))}
+							</div>
+							<div className="open-search">
+								<Link to="/search">Add a book</Link>
+            	</div>
+						</div>
+					)} />
+					<Route path="/search" component={Search} />
+
+					
 				</div>
     	)
 	}
