@@ -34,7 +34,7 @@ class BooksApp extends Component<{}, State> {
 			}
 		}
 	}
-
+	
 	componentDidMount() {
 		BooksAPI.getAll()
 			.then((books) => {
@@ -52,6 +52,30 @@ class BooksApp extends Component<{}, State> {
 			})
 	}
 
+	updateBook = (book, shelfId) => {
+		this.setState((prevState) => {
+			const { shelfs } = prevState;
+			console.log(`Shelf ${book.shelf}`);
+			console.log(`Book ${book.shelf} - ${book.title}`);
+
+			if(shelfs[shelfId]) {
+				//remove from current shelf
+				shelfs[book.shelf].books = shelfs[book.shelf].books.filter(b => b.id !== book.id);
+
+				//add to the new shelf
+				book.shelf = shelfId;
+				prevState.shelfs[shelfId].books.push(book);
+			} else {
+				// in case of 'none' just remove from current shelf
+				shelfs[book.shelf].books = shelfs[book.shelf].books.filter(b => b.id !== book.id);
+			}
+
+			return { shelfs };
+		});
+
+		BooksAPI.update(book, shelfId);
+	}
+
 	render() {
 			const { shelfs } = this.state;
     	return (
@@ -61,7 +85,11 @@ class BooksApp extends Component<{}, State> {
            		<Header />
 	          	<div className="list-books-content">
 								{Object.keys(shelfs).map(key => (
-									<BookShelf key={shelfs[key].id} shelfId={shelfs[key].id} title={shelfs[key].title} books={shelfs[key].books} />
+									<BookShelf key={shelfs[key].id} 
+										shelfId={shelfs[key].id} 
+										title={shelfs[key].title} 
+										books={shelfs[key].books} 
+										onUpdate={this.updateBook} />
 								))}
 							</div>
 							<div className="open-search">

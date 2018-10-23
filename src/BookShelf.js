@@ -6,13 +6,14 @@ import type { Book } from './Types';
 type Props = {
 	shelfId: string,
   title: string,
-  books: Array<Book>
+  books: Array<Book>,
+  onUpdate: Function
 };
 
 class BookShelf extends Component<Props> {
 	render() {
 
-		const { shelfId, title, books } = this.props;
+		const { shelfId, title, books, onUpdate } = this.props;
 		
 		return (
 			<div>
@@ -21,7 +22,7 @@ class BookShelf extends Component<Props> {
 					<div className="bookshelf-books">
 						<ol className="books-grid">
 							{books.map(book => (
-								<BookDetails shelfId={shelfId} book={book} key={book.id} />
+								<BookDetails shelfId={shelfId} book={book} key={book.id} onUpdate={onUpdate} />
 							))}
 						</ol>
 					</div>

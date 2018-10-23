@@ -4,13 +4,16 @@ import type { Book } from './Types';
 
 type Props = {
 	shelfId: string,
-	book: Book
+	book: Book,
+	onUpdate: Function
 };
 
+
 class BookDetails extends Component<Props> {
+
 	render() {
 		
-		const { shelfId, book } = this.props;
+		const { shelfId, book, onUpdate } = this.props;
 		
 		return (
 			<li>
@@ -18,7 +21,7 @@ class BookDetails extends Component<Props> {
 					<div className="book-top">
 						<div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
 						<div className="book-shelf-changer">
-							<select>
+							<select defaultValue={shelfId} onChange={(event) => onUpdate(book, event.target.value)}>
 								<option value="move" disabled>Move to...</option>
 								<option value="currentlyReading">Currently Reading</option>
 								<option value="wantToRead">Want to Read</option>
