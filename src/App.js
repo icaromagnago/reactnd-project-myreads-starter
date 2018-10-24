@@ -34,7 +34,7 @@ class BooksApp extends Component<{}, State> {
 			}
 		}
 	}
-	
+
 	componentDidMount() {
 		BooksAPI.getAll()
 			.then((books) => {
@@ -55,9 +55,6 @@ class BooksApp extends Component<{}, State> {
 	updateBook = (book, shelfId) => {
 		this.setState((prevState) => {
 			const { shelfs } = prevState;
-			console.log(`Shelf ${book.shelf}`);
-			console.log(`Book ${book.shelf} - ${book.title}`);
-
 			if(shelfs[shelfId]) {
 				//remove from current shelf
 				shelfs[book.shelf].books = shelfs[book.shelf].books.filter(b => b.id !== book.id);
@@ -97,7 +94,9 @@ class BooksApp extends Component<{}, State> {
             	</div>
 						</div>
 					)} />
-					<Route path="/search" component={Search} />
+					<Route path="/search" render={() => (
+						<Search onUpdate={this.updateBook} />
+					)} />
 
 					
 				</div>

@@ -1,9 +1,53 @@
 //@flow
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import BookDetails from './BookDetails';
+import * as BooksAPI from './BooksAPI';
 
-class Search extends Component<{}, {}> {
+type Props = {
+	onUpdate: Function
+};
+
+type State = {
+	query: string,
+	books: Array<Book>
+};
+
+class Search extends Component<Props, State> {
+
+	state = {
+		query: "",
+		books: []
+	}
+
+	updateQuery = (query) => {
+		this.setState(() => ({
+			query: query.trim()
+		}));
+
+		if (query !== '') {
+			BooksAPI.search(query)
+				.then((books) => {
+					this.setState(() => ({
+						books: Array.isArray(books) ? books : []
+					}))
+				})
+		} else {
+			this.setState(() => ({
+				books: []
+			}))
+		}
+	}
+
+	updateBook = (book, shelfId) => {
+		BooksAPI.update(book, shelfId);
+	}
+
 	render() {
+
+		const { query, books } = this.state;
+		const { onUpdate } = this.props;
+	
 		return (
 			<div className="search-books">
 	      <div className="search-books-bar">
@@ -17,12 +61,21 @@ class Search extends Component<{}, {}> {
 	            However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
 	            you don't find a specific author or title. Every search is limited by search terms.
 	          */}
-	          <input type="text" placeholder="Search by title or author"/>
+	           
+	          <input type="text" 
+	          	placeholder="Search by title or author" 
+	          	value={query}
+							onChange={(event) => this.updateQuery(event.target.value)} />
+	          
 
 	        </div>
 	      </div>
 	      <div className="search-books-results">
-	        <ol className="books-grid"></ol>
+	        <ol className="books-grid">
+						{books.map(book => (
+								<BookDetails shelfId={book.shelf} book={book} key={book.id} onUpdate={this.updateBook} />
+						))}
+	        </ol>
 	      </div>
 	    </div>
 		)
