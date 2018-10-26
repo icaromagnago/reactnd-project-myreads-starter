@@ -24,7 +24,7 @@ class Search extends Component<Props, State> {
 
 	updateQuery = (query: string) => {
 		this.setState(() => ({
-			query: query.trim()
+			query: query
 		}));
 
 		if (query !== '') {
