@@ -18,7 +18,7 @@ type State = {
 class Search extends Component<Props, State> {
 
 	state = {
-		query: "",
+		query: '',
 		books: []
 	}
 
@@ -27,7 +27,7 @@ class Search extends Component<Props, State> {
 			query: query.trim()
 		}));
 
-		if (query !== "") {
+		if (query !== '') {
 			BooksAPI.search(query)
 				.then((results) => {
 
@@ -47,7 +47,8 @@ class Search extends Component<Props, State> {
 				})
 		} else {
 			this.setState(() => ({
-				books: []
+				books: [],
+				query: ''
 			}))
 		}
 	}
