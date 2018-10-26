@@ -48,11 +48,10 @@ class BooksApp extends Component<{}, State> {
 
 					return { shelfs }
 				})
-				console.log(this.state.shelfs);
 			})
 	}
 
-	updateBook = (book, shelfId) => {
+	updateBook = (book: Book, shelfId: string) => {
 		this.setState((prevState) => {
 			const { shelfs } = prevState;
 			if(shelfs[shelfId]) {
@@ -71,6 +70,20 @@ class BooksApp extends Component<{}, State> {
 		});
 
 		BooksAPI.update(book, shelfId);
+	}
+
+	addBook = (book: Book, shelfId: string) => {
+		if(book.shelf === 'none') {
+			book.shelf = shelfId;
+			this.setState((prevState) => {
+				const { shelfs } = prevState;
+				prevState.shelfs[shelfId].books.push(book);
+			});
+
+			BooksAPI.update(book, shelfId);			
+		} else {
+			this.updateBook(book, shelfId);
+		}
 	}
 
 	render() {
@@ -95,7 +108,7 @@ class BooksApp extends Component<{}, State> {
 						</div>
 					)} />
 					<Route path="/search" render={() => (
-						<Search onUpdate={this.updateBook} />
+						<Search onAddBook={this.addBook} myBooks={[...shelfs.currentlyReading.books, ...shelfs.wantToRead.books, ...shelfs.read.books]} />
 					)} />
 
 					
