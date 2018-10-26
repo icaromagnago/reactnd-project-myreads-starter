@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import BookDetails from './BookDetails';
 import * as BooksAPI from './BooksAPI';
-import type { Book, Shelf } from './Types';
+import type { Book } from './Types';
 
 type Props = {
 	onAddBook: Function,
@@ -27,15 +27,15 @@ class Search extends Component<Props, State> {
 			query: query.trim()
 		}));
 
-		if (query !== '') {
+		if (query !== "") {
 			BooksAPI.search(query)
 				.then((results) => {
 
-					let books = [];
+					let books: Array<Book> = [];
 
 					if(Array.isArray(results)) {
 						books = results.map(result => {
-							let bookInShelf = this.props.myBooks.filter(b => b.id === result.id);
+							let bookInShelf: Array<Book> = this.props.myBooks.filter(b => b.id === result.id);
 							result.shelf = bookInShelf.length > 0 ? bookInShelf[0].shelf : 'none';
 							return result;
 						})

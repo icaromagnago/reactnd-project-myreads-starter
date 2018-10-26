@@ -60,7 +60,7 @@ class BooksApp extends Component<{}, State> {
 
 				//add to the new shelf
 				book.shelf = shelfId;
-				prevState.shelfs[shelfId].books.push(book);
+				shelfs[shelfId].books.push(book);
 			} else {
 				// in case of 'none' just remove from current shelf
 				shelfs[book.shelf].books = shelfs[book.shelf].books.filter(b => b.id !== book.id);
@@ -77,10 +77,10 @@ class BooksApp extends Component<{}, State> {
 			book.shelf = shelfId;
 			this.setState((prevState) => {
 				const { shelfs } = prevState;
-				prevState.shelfs[shelfId].books.push(book);
+				shelfs[shelfId].books.push(book);
 			});
 
-			BooksAPI.update(book, shelfId);			
+			BooksAPI.update(book, shelfId);
 		} else {
 			this.updateBook(book, shelfId);
 		}
