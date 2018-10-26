@@ -27,11 +27,11 @@ This project uses Flow. To analyze the code for errors execute `yarn flow check`
 1) A página de busca possui um campo de busca.
 
 2) A página de busca se comporta corretamente:
-* a) Quando o usuário digita algo no campo de busca, os livros relacionados à sua busca são corretamente exibidos na página.
-* b) Resultados de buscas não são mostrados quando todo o texto do input de pesquisa é deletado
-* c) Buscas inválidas são cuidadas e resultados anteriores não são mostrados.
-* d) A pesquisa funciona corretamente quando um livro não possui um thumbnail ou um autor. (Para testar isto, pesquise por "poetry" e "biography").
-* e) O usuário consegue pesquisar com múltiplas palavras, tais como "artificial intelligence".
+* Quando o usuário digita algo no campo de busca, os livros relacionados à sua busca são corretamente exibidos na página.
+* Resultados de buscas não são mostrados quando todo o texto do input de pesquisa é deletado
+* Buscas inválidas são cuidadas e resultados anteriores não são mostrados.
+* A pesquisa funciona corretamente quando um livro não possui um thumbnail ou um autor. (Para testar isto, pesquise por "poetry" e "biography").
+* O usuário consegue pesquisar com múltiplas palavras, tais como "artificial intelligence".
 
 3) Os resultados da página de busca permitem que os usuários selecionem "currently reading", "want to read" ou "read" e coloquem os livros na estante certa.
 
